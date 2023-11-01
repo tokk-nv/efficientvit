@@ -8,6 +8,10 @@ import torch
 
 from efficientvit.models.utils.list import val2list
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["CosineLRwithWarmup"]
 
 
@@ -17,7 +21,7 @@ class CosineLRwithWarmup(torch.optim.lr_scheduler._LRScheduler):
         optimizer: torch.optim.Optimizer,
         warmup_steps: int,
         warmup_lr: float,
-        decay_steps: int or list[int],
+        decay_steps: int or List[int],
         last_epoch: int = -1,
     ) -> None:
         self.warmup_steps = warmup_steps
@@ -25,7 +29,7 @@ class CosineLRwithWarmup(torch.optim.lr_scheduler._LRScheduler):
         self.decay_steps = val2list(decay_steps)
         super().__init__(optimizer, last_epoch)
 
-    def get_lr(self) -> list[float]:
+    def get_lr(self) -> List[float]:
         if self.last_epoch < self.warmup_steps:
             return [
                 (base_lr - self.warmup_lr) * (self.last_epoch + 1) / self.warmup_steps + self.warmup_lr

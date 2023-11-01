@@ -4,6 +4,8 @@
 
 import os
 from inspect import signature
+from typing import List
+from typing import Dict
 
 import torch
 import torch.nn as nn
@@ -27,7 +29,7 @@ def get_device(model: nn.Module) -> torch.device:
     return model.parameters().__next__().device
 
 
-def get_same_padding(kernel_size: int or tuple[int, ...]) -> int or tuple[int, ...]:
+def get_same_padding(kernel_size: int or Tuple[int, ...]) -> int or Tuple[int, ...]:
     if isinstance(kernel_size, tuple):
         return tuple([get_same_padding(ks) for ks in kernel_size])
     else:
@@ -38,7 +40,7 @@ def get_same_padding(kernel_size: int or tuple[int, ...]) -> int or tuple[int, .
 def resize(
     x: torch.Tensor,
     size: any or None = None,
-    scale_factor: list[float] or None = None,
+    scale_factor: List[float] or None = None,
     mode: str = "bicubic",
     align_corners: bool or None = False,
 ) -> torch.Tensor:
@@ -56,7 +58,7 @@ def resize(
         raise NotImplementedError(f"resize(mode={mode}) not implemented.")
 
 
-def build_kwargs_from_config(config: dict, target_func: callable) -> dict[str, any]:
+def build_kwargs_from_config(config: dict, target_func: callable) -> Dict[str, any]:
     valid_keys = list(signature(target_func).parameters)
     kwargs = {}
     for key in config:
@@ -65,7 +67,7 @@ def build_kwargs_from_config(config: dict, target_func: callable) -> dict[str, a
     return kwargs
 
 
-def load_state_dict_from_file(file: str, only_state_dict=True) -> dict[str, torch.Tensor]:
+def load_state_dict_from_file(file: str, only_state_dict=True) -> Dict[str, torch.Tensor]:
     file = os.path.realpath(os.path.expanduser(file))
     checkpoint = torch.load(file, map_location="cpu")
     if only_state_dict and "state_dict" in checkpoint:

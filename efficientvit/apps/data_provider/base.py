@@ -11,10 +11,14 @@ from torch.utils.data.distributed import DistributedSampler
 from efficientvit.apps.data_provider.random_resolution import RRSController
 from efficientvit.models.utils import val2tuple
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["parse_image_size", "random_drop_data", "DataProvider"]
 
 
-def parse_image_size(size: int or str) -> tuple[int, int]:
+def parse_image_size(size: int or str) -> Tuple[int, int]:
     if isinstance(size, str):
         size = [int(val) for val in size.split("-")]
         return size[0], size[1]
@@ -51,7 +55,7 @@ class DataProvider:
         test_batch_size: int or None,
         valid_size: int or float or None,
         n_worker: int,
-        image_size: int or list[int] or str or list[str],
+        image_size: int or List[int] or str or List[str],
         num_replicas: int or None = None,
         rank: int or None = None,
         train_ratio: float or None = None,
@@ -101,16 +105,16 @@ class DataProvider:
         self.sub_train = None
 
     @property
-    def data_shape(self) -> tuple[int, ...]:
+    def data_shape(self) -> Tuple[int, ...]:
         return 3, self.active_image_size[0], self.active_image_size[1]
 
-    def build_valid_transform(self, image_size: tuple[int, int] or None = None) -> any:
+    def build_valid_transform(self, image_size: Tuple[int, int] or None = None) -> any:
         raise NotImplementedError
 
-    def build_train_transform(self, image_size: tuple[int, int] or None = None) -> any:
+    def build_train_transform(self, image_size: Tuple[int, int] or None = None) -> any:
         raise NotImplementedError
 
-    def build_datasets(self) -> tuple[any, any, any]:
+    def build_datasets(self) -> Tuple[any, any, any]:
         raise NotImplementedError
 
     def build_dataloader(self, dataset: any or None, batch_size: int, n_worker: int, drop_last: bool, train: bool):
@@ -147,13 +151,13 @@ class DataProvider:
         if isinstance(self.train.sampler, DistributedSampler):
             self.train.sampler.set_epoch(epoch)
 
-    def assign_active_image_size(self, new_size: int or tuple[int, int]) -> None:
+    def assign_active_image_size(self, new_size: int or Tuple[int, int]) -> None:
         self.active_image_size = val2tuple(new_size, 2)
         new_transform = self.build_valid_transform(self.active_image_size)
         # change the transform of the valid and test set
         self.valid.dataset.transform = self.test.dataset.transform = new_transform
 
-    def sample_val_dataset(self, train_dataset, valid_transform) -> tuple[any, any]:
+    def sample_val_dataset(self, train_dataset, valid_transform) -> Tuple[any, any]:
         if self.valid_size is not None:
             if 0 < self.valid_size < 1:
                 valid_size = int(self.valid_size * len(train_dataset))

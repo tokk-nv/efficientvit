@@ -8,10 +8,14 @@ from torchpack import distributed
 
 from efficientvit.models.utils.list import list_mean, list_sum
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["sync_tensor"]
 
 
-def sync_tensor(tensor: torch.Tensor or float, reduce="mean") -> torch.Tensor or list[torch.Tensor]:
+def sync_tensor(tensor: torch.Tensor or float, reduce="mean") -> torch.Tensor or List[torch.Tensor]:
     if not isinstance(tensor, torch.Tensor):
         tensor = torch.Tensor(1).fill_(tensor).cuda()
     tensor_list = [torch.empty_like(tensor) for _ in range(distributed.size())]

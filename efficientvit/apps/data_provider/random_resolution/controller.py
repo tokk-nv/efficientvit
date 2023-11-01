@@ -10,6 +10,10 @@ import torchvision.transforms.functional as F
 
 from efficientvit.models.utils import torch_random_choices
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = [
     "RRSController",
     "get_interpolate",
@@ -24,7 +28,7 @@ class RRSController:
     CHOICE_LIST = None
 
     @staticmethod
-    def get_candidates() -> list[tuple[int, int]]:
+    def get_candidates() -> List[Tuple[int, int]]:
         return copy.deepcopy(RRSController.IMAGE_SIZE_LIST)
 
     @staticmethod

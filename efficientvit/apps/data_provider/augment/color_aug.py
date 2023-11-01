@@ -7,6 +7,10 @@ import torchvision.transforms as transforms
 from PIL import Image
 from timm.data.auto_augment import rand_augment_transform
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["ColorAug", "RandAug"]
 
 
@@ -55,7 +59,7 @@ class ColorAug(transforms.ColorJitter, ImageAug):
 
 
 class RandAug(ImageAug):
-    def __init__(self, config: dict[str, any], mean: tuple[float, float, float], key="data"):
+    def __init__(self, config: Dict[str, any], mean: Tuple[float, float, float], key="data"):
         n = config.get("n", 2)
         m = config.get("m", 9)
         mstd = config.get("mstd", 1.0)

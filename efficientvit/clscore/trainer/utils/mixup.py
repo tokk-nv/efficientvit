@@ -7,6 +7,10 @@ import torch.distributions
 from efficientvit.apps.data_provider.augment import rand_bbox
 from efficientvit.models.utils.random import torch_randint, torch_shuffle
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["apply_mixup", "mixup", "cutmix"]
 
 
@@ -15,7 +19,7 @@ def apply_mixup(
     labels: torch.Tensor,
     lam: float,
     mix_type="mixup",
-) -> tuple[torch.Tensor, torch.Tensor]:
+) -> Tuple[torch.Tensor, torch.Tensor]:
     if mix_type == "mixup":
         return mixup(images, labels, lam)
     elif mix_type == "cutmix":
@@ -28,7 +32,7 @@ def mixup(
     images: torch.Tensor,
     target: torch.Tensor,
     lam: float,
-) -> tuple[torch.Tensor, torch.Tensor]:
+) -> Tuple[torch.Tensor, torch.Tensor]:
     rand_index = torch_shuffle(list(range(0, images.shape[0])))
 
     flipped_images = images[rand_index]
@@ -44,7 +48,7 @@ def cutmix(
     images: torch.Tensor,
     target: torch.Tensor,
     lam: float,
-) -> tuple[torch.Tensor, torch.Tensor]:
+) -> Tuple[torch.Tensor, torch.Tensor]:
     rand_index = torch_shuffle(list(range(0, images.shape[0])))
 
     flipped_images = images[rand_index]

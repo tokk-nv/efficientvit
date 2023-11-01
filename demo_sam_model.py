@@ -18,6 +18,10 @@ from efficientvit.models.efficientvit.sam import EfficientViTSamAutomaticMaskGen
 from efficientvit.models.utils import build_kwargs_from_config
 from efficientvit.sam_model_zoo import create_sam_model
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 
 def load_image(data_path: str, mode="rgb") -> np.ndarray:
     img = Image.open(data_path)
@@ -26,7 +30,7 @@ def load_image(data_path: str, mode="rgb") -> np.ndarray:
     return np.array(img)
 
 
-def cat_images(image_list: list[np.ndarray], axis=1, pad=20) -> np.ndarray:
+def cat_images(image_list: List[np.ndarray], axis=1, pad=20) -> np.ndarray:
     shape_list = [image.shape for image in image_list]
     max_h = max([shape[0] for shape in shape_list]) + pad * 2
     max_w = max([shape[1] for shape in shape_list]) + pad * 2
@@ -71,8 +75,8 @@ def draw_binary_mask(raw_image: np.ndarray, binary_mask: np.ndarray, mask_color=
 
 def draw_bbox(
     image: np.ndarray,
-    bbox: list[list[int]],
-    color: str or list[str] = "g",
+    bbox: List[List[int]],
+    color: str or List[str] = "g",
     linewidth=1,
     tmp_name=".tmp.png",
 ) -> np.ndarray:
@@ -95,8 +99,8 @@ def draw_bbox(
 
 def draw_scatter(
     image: np.ndarray,
-    points: list[list[int]],
-    color: str or list[str] = "g",
+    points: List[List[int]],
+    color: str or List[str] = "g",
     marker="*",
     s=10,
     ew=0.25,

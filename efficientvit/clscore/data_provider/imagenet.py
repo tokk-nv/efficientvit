@@ -15,6 +15,10 @@ from efficientvit.apps.data_provider.random_resolution import MyRandomResizedCro
 from efficientvit.apps.utils import partial_update_config
 from efficientvit.models.utils import val2list
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["ImageNetDataProvider"]
 
 
@@ -33,13 +37,13 @@ class ImageNetDataProvider(DataProvider):
         self,
         data_dir: str or None = None,
         rrc_config: dict or None = None,
-        data_aug: dict or list[dict] or None = None,
+        data_aug: dict or List[dict] or None = None,
         ###########################################
         train_batch_size=128,
         test_batch_size=128,
         valid_size: int or float or None = None,
         n_worker=8,
-        image_size: int or list[int] = 224,
+        image_size: int or List[int] = 224,
         num_replicas: int or None = None,
         rank: int or None = None,
         train_ratio: float or None = None,
@@ -64,7 +68,7 @@ class ImageNetDataProvider(DataProvider):
             drop_last,
         )
 
-    def build_valid_transform(self, image_size: tuple[int, int] or None = None) -> any:
+    def build_valid_transform(self, image_size: Tuple[int, int] or None = None) -> any:
         image_size = (image_size or self.active_image_size)[0]
         crop_size = int(math.ceil(image_size / self.rrc_config["test_crop_ratio"]))
         return transforms.Compose(
@@ -79,7 +83,7 @@ class ImageNetDataProvider(DataProvider):
             ]
         )
 
-    def build_train_transform(self, image_size: tuple[int, int] or None = None) -> any:
+    def build_train_transform(self, image_size: Tuple[int, int] or None = None) -> any:
         image_size = image_size or self.image_size
 
         # random_resize_crop -> random_horizontal_flip
@@ -112,7 +116,7 @@ class ImageNetDataProvider(DataProvider):
         ]
         return transforms.Compose(train_transforms)
 
-    def build_datasets(self) -> tuple[any, any, any]:
+    def build_datasets(self) -> Tuple[any, any, any]:
         train_transform = self.build_train_transform()
         valid_transform = self.build_valid_transform()
 

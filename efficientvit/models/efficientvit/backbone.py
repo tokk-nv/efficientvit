@@ -18,6 +18,10 @@ from efficientvit.models.nn import (
 )
 from efficientvit.models.utils import build_kwargs_from_config
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = [
     "EfficientViTBackbone",
     "efficientvit_backbone_b0",
@@ -35,8 +39,8 @@ __all__ = [
 class EfficientViTBackbone(nn.Module):
     def __init__(
         self,
-        width_list: list[int],
-        depth_list: list[int],
+        width_list: List[int],
+        depth_list: List[int],
         in_channels=3,
         dim=32,
         expand_ratio=4,
@@ -149,7 +153,7 @@ class EfficientViTBackbone(nn.Module):
             )
         return block
 
-    def forward(self, x: torch.Tensor) -> dict[str, torch.Tensor]:
+    def forward(self, x: torch.Tensor) -> Dict[str, torch.Tensor]:
         output_dict = {"input": x}
         output_dict["stage0"] = x = self.input_stem(x)
         for stage_id, stage in enumerate(self.stages, 1):
@@ -201,8 +205,8 @@ def efficientvit_backbone_b3(**kwargs) -> EfficientViTBackbone:
 class EfficientViTLargeBackbone(nn.Module):
     def __init__(
         self,
-        width_list: list[int],
-        depth_list: list[int],
+        width_list: List[int],
+        depth_list: List[int],
         in_channels=3,
         qkv_dim=32,
         norm="bn2d",
@@ -328,7 +332,7 @@ class EfficientViTLargeBackbone(nn.Module):
             )
         return block
 
-    def forward(self, x: torch.Tensor) -> dict[str, torch.Tensor]:
+    def forward(self, x: torch.Tensor) -> Dict[str, torch.Tensor]:
         output_dict = {"input": x}
         for stage_id, stage in enumerate(self.stages):
             output_dict["stage%d" % stage_id] = x = stage(x)

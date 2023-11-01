@@ -11,8 +11,12 @@ from tqdm import tqdm
 from efficientvit.models.efficientvit.sam import EfficientViTSamPredictor
 from efficientvit.sam_model_zoo import create_sam_model
 
+from typing import Dict
+from typing import List
+from typing import Tuple
 
-def bbox_xywh_to_xyxy(bbox: list[int]) -> list[int]:
+
+def bbox_xywh_to_xyxy(bbox: List[int]) -> List[int]:
     return [bbox[0], bbox[1], bbox[0] + bbox[2], bbox[1] + bbox[3]]
 
 
@@ -22,7 +26,7 @@ def iou(mask_a: np.ndarray, mask_b: np.ndarray) -> float:
     return float(intersection / union) * 100
 
 
-def predict_mask(predictor: EfficientViTSamPredictor, bbox: list[int]) -> np.ndarray:
+def predict_mask(predictor: EfficientViTSamPredictor, bbox: List[int]) -> np.ndarray:
     masks, iou_predictions, _ = predictor.predict(
         point_coords=None,
         point_labels=None,
@@ -34,7 +38,7 @@ def predict_mask(predictor: EfficientViTSamPredictor, bbox: list[int]) -> np.nda
     return mask
 
 
-def filter_results_by_area(results: list[dict], min=None, max=None) -> list[dict]:
+def filter_results_by_area(results: List[dict], min=None, max=None) -> List[dict]:
     filtered = []
     for r in results:
         if min is not None and r["area"] < min:
@@ -45,7 +49,7 @@ def filter_results_by_area(results: list[dict], min=None, max=None) -> list[dict
     return filtered
 
 
-def get_coco_metric(results: list[dict]) -> dict[str, float]:
+def get_coco_metric(results: List[dict]) -> Dict[str, float]:
     small_results = filter_results_by_area(results, None, 32**2)
     medium_results = filter_results_by_area(results, 32**2, 96**2)
     large_results = filter_results_by_area(results, 96**2, None)

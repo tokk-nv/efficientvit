@@ -9,6 +9,10 @@ import torch.nn as nn
 
 from efficientvit.apps.utils import CosineLRwithWarmup, build_optimizer
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["Scheduler", "RunConfig"]
 
 
@@ -56,7 +60,7 @@ class RunConfig:
         self.global_step = 0
         self.batch_per_epoch = 1
 
-    def build_optimizer(self, network: nn.Module) -> tuple[any, any]:
+    def build_optimizer(self, network: nn.Module) -> Tuple[any, any]:
         r"""require setting 'batch_per_epoch' before building optimizer & lr_scheduler"""
         param_dict = {}
         for name, param in network.named_parameters():

@@ -18,6 +18,10 @@ from efficientvit.models.nn import (
 )
 from efficientvit.models.utils import build_kwargs_from_config
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = [
     "EfficientViTSeg",
     "efficientvit_seg_b0",

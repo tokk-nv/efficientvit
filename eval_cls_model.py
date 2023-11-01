@@ -14,8 +14,12 @@ from tqdm import tqdm
 from efficientvit.apps.utils import AverageMeter
 from efficientvit.cls_model_zoo import create_cls_model
 
+from typing import Dict
+from typing import List
+from typing import Tuple
 
-def accuracy(output: torch.Tensor, target: torch.Tensor, topk=(1,)) -> list[torch.Tensor]:
+
+def accuracy(output: torch.Tensor, target: torch.Tensor, topk=(1,)) -> List[torch.Tensor]:
     maxk = max(topk)
     batch_size = target.shape[0]
 

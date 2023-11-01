@@ -14,10 +14,14 @@ from efficientvit.models.efficientvit import (
 from efficientvit.models.nn.norm import set_norm_eps
 from efficientvit.models.utils import load_state_dict_from_file
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["create_seg_model"]
 
 
-REGISTERED_SEG_MODEL: dict[str, dict[str, str]] = {
+REGISTERED_SEG_MODEL: Dict[str, Dict[str, str]] = {
     "cityscapes": {
         "b0": "assets/checkpoints/seg/cityscapes/b0.pt",
         "b1": "assets/checkpoints/seg/cityscapes/b1.pt",

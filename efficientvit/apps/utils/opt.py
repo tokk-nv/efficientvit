@@ -4,11 +4,15 @@
 
 import torch
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["REGISTERED_OPTIMIZER_DICT", "build_optimizer"]
 
 # register optimizer here
 #   name: optimizer, kwargs with default values
-REGISTERED_OPTIMIZER_DICT: dict[str, tuple[type, dict[str, any]]] = {
+REGISTERED_OPTIMIZER_DICT: Dict[str, Tuple[type, Dict[str, any]]] = {
     "sgd": (torch.optim.SGD, {"momentum": 0.9, "nesterov": True}),
     "adam": (torch.optim.Adam, {"betas": (0.9, 0.999), "eps": 1e-8, "amsgrad": False}),
     "adamw": (torch.optim.AdamW, {"betas": (0.9, 0.999), "eps": 1e-8, "amsgrad": False}),

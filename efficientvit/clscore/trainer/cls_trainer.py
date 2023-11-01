@@ -17,6 +17,10 @@ from efficientvit.apps.utils import AverageMeter, sync_tensor
 from efficientvit.clscore.trainer.utils import accuracy, apply_mixup, label_smooth
 from efficientvit.models.utils import list_join, list_mean, torch_random_choices
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["ClsTrainer"]
 
 
@@ -36,7 +40,7 @@ class ClsTrainer(Trainer):
         self.auto_restart_thresh = auto_restart_thresh
         self.test_criterion = nn.CrossEntropyLoss()
 
-    def _validate(self, model, data_loader, epoch) -> dict[str, any]:
+    def _validate(self, model, data_loader, epoch) -> Dict[str, any]:
         val_loss = AverageMeter()
         val_top1 = AverageMeter()
         val_top5 = AverageMeter()
@@ -78,7 +82,7 @@ class ClsTrainer(Trainer):
             **({"val_top5": val_top5.avg} if val_top5.count > 0 else {}),
         }
 
-    def before_step(self, feed_dict: dict[str, any]) -> dict[str, any]:
+    def before_step(self, feed_dict: Dict[str, any]) -> Dict[str, any]:
         images = feed_dict["data"].cuda()
         labels = feed_dict["label"].cuda()
 
@@ -108,7 +112,7 @@ class ClsTrainer(Trainer):
             "label": labels,
         }
 
-    def run_step(self, feed_dict: dict[str, any]) -> dict[str, any]:
+    def run_step(self, feed_dict: Dict[str, any]) -> Dict[str, any]:
         images = feed_dict["data"]
         labels = feed_dict["label"]
 
@@ -142,7 +146,7 @@ class ClsTrainer(Trainer):
             "top1": top1,
         }
 
-    def _train_one_epoch(self, epoch: int) -> dict[str, any]:
+    def _train_one_epoch(self, epoch: int) -> Dict[str, any]:
         train_loss = AverageMeter()
         train_top1 = AverageMeter()
 

@@ -4,10 +4,14 @@
 
 import torch
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["accuracy"]
 
 
-def accuracy(output: torch.Tensor, target: torch.Tensor, topk=(1,)) -> list[torch.Tensor]:
+def accuracy(output: torch.Tensor, target: torch.Tensor, topk=(1,)) -> List[torch.Tensor]:
     """Computes the precision@k for the specified values of k."""
     maxk = max(topk)
     batch_size = target.shape[0]

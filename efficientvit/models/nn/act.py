@@ -8,11 +8,13 @@ import torch.nn as nn
 
 from efficientvit.models.utils import build_kwargs_from_config
 
+from typing import Dict
+
 __all__ = ["build_act"]
 
 
 # register activation function here
-REGISTERED_ACT_DICT: dict[str, type] = {
+REGISTERED_ACT_DICT: Dict[str, type] = {
     "relu": nn.ReLU,
     "relu6": nn.ReLU6,
     "hswish": nn.Hardswish,

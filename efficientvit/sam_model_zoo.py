@@ -11,10 +11,14 @@ from efficientvit.models.efficientvit import (
 from efficientvit.models.nn.norm import set_norm_eps
 from efficientvit.models.utils import load_state_dict_from_file
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["create_sam_model"]
 
 
-REGISTERED_SAM_MODEL: dict[str, str] = {
+REGISTERED_SAM_MODEL: Dict[str, str] = {
     "l0": "assets/checkpoints/sam/l0.pt",
     "l1": "assets/checkpoints/sam/l1.pt",
     "l2": "assets/checkpoints/sam/l2.pt",

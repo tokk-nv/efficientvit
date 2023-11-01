@@ -15,10 +15,14 @@ from efficientvit.models.efficientvit import (
 from efficientvit.models.nn.norm import set_norm_eps
 from efficientvit.models.utils import load_state_dict_from_file
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["create_cls_model"]
 
 
-REGISTERED_CLS_MODEL: dict[str, str] = {
+REGISTERED_CLS_MODEL: Dict[str, str] = {
     "b0-r224": "assets/checkpoints/cls/b0-r224.pt",
     ###############################################
     "b1-r224": "assets/checkpoints/cls/b1-r224.pt",

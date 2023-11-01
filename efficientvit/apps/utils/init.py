@@ -6,10 +6,14 @@ import torch
 import torch.nn as nn
 from torch.nn.modules.batchnorm import _BatchNorm
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 __all__ = ["init_modules", "zero_last_gamma"]
 
 
-def init_modules(model: nn.Module or list[nn.Module], init_type="trunc_normal") -> None:
+def init_modules(model: nn.Module or List[nn.Module], init_type="trunc_normal") -> None:
     _DEFAULT_INIT_PARAM = {"trunc_normal": 0.02}
 
     if isinstance(model, list):

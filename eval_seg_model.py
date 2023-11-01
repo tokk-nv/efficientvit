@@ -20,17 +20,21 @@ from efficientvit.apps.utils import AverageMeter
 from efficientvit.models.utils import resize
 from efficientvit.seg_model_zoo import create_seg_model
 
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 
 class Resize(object):
     def __init__(
         self,
-        crop_size: tuple[int, int] or None,
+        crop_size: Tuple[int, int] or None,
         interpolation: int or None = cv2.INTER_CUBIC,
     ):
         self.crop_size = crop_size
         self.interpolation = interpolation
 
-    def __call__(self, feed_dict: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
+    def __call__(self, feed_dict: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
         if self.crop_size is None or self.interpolation is None:
             return feed_dict
 
@@ -56,7 +60,7 @@ class ToTensor(object):
         self.std = std
         self.inplace = inplace
 
-    def __call__(self, feed_dict: dict[str, np.ndarray]) -> dict[str, torch.Tensor]:
+    def __call__(self, feed_dict: Dict[str, np.ndarray]) -> Dict[str, torch.Tensor]:
         image, mask = feed_dict["data"], feed_dict["label"]
         image = image.transpose((2, 0, 1))  # (H, W, C) -> (C, H, W)
         image = torch.as_tensor(image, dtype=torch.float32).div(255.0)
@@ -73,7 +77,7 @@ class SegIOU:
         self.num_classes = num_classes
         self.ignore_index = ignore_index
 
-    def __call__(self, outputs: torch.Tensor, targets: torch.Tensor) -> dict[str, torch.Tensor]:
+    def __call__(self, outputs: torch.Tensor, targets: torch.Tensor) -> Dict[str, torch.Tensor]:
         outputs = (outputs + 1) * (targets != self.ignore_index)
         targets = (targets + 1) * (targets != self.ignore_index)
         intersections = outputs * (outputs == targets)
@@ -186,7 +190,7 @@ class CityscapesDataset(Dataset):
         )
     )
 
-    def __init__(self, data_dir: str, crop_size: tuple[int, int] or None = None):
+    def __init__(self, data_dir: str, crop_size: Tuple[int, int] or None = None):
         super().__init__()
 
         # load samples
@@ -216,7 +220,7 @@ class CityscapesDataset(Dataset):
     def __len__(self) -> int:
         return len(self.samples)
 
-    def __getitem__(self, index: int) -> dict[str, any]:
+    def __getitem__(self, index: int) -> Dict[str, any]:
         image_path, mask_path = self.samples[index]
         image = np.array(Image.open(image_path).convert("RGB"))
         mask = np.array(Image.open(mask_path))
@@ -568,7 +572,7 @@ class ADE20KDataset(Dataset):
     def __len__(self) -> int:
         return len(self.samples)
 
-    def __getitem__(self, index: int) -> dict[str, any]:
+    def __getitem__(self, index: int) -> Dict[str, any]:
         image_path, mask_path = self.samples[index]
         image = np.array(Image.open(image_path).convert("RGB"))
         mask = np.array(Image.open(mask_path), dtype=np.int64) - 1
